@@ -7,9 +7,9 @@ require 'ruby_kml'
 module Mm
   class Error < StandardError; end
   # Your code goes here...
-  # from github put the link here
   class RandomWalk
-
+    # one dimesional RandomWalk implementation 
+    # inspired by https://github.com/egtann/random-walk
     def self.one_dimension(limits, array_length, step = 1)
       starting_point = Random.rand(limits)
       output_array = [starting_point]
@@ -25,6 +25,8 @@ module Mm
       return output_array
     end
 
+    # two dimensional RandomWalk implmentation
+    # x,y plot similar to other simulator (NS3)
     def self.two_dimension(array_length, step = 1, starting_x = 0, starting_y = 0)
       x = Array.new(array_length, 0)
       y = Array.new(array_length, 0)
@@ -50,7 +52,9 @@ module Mm
       return [x,y]
     end
 
-    def self.two_latitude_longitude(array_length, starting_location)
+    # latitude and longitude RandomWalk implmentation (missing altitude)
+    # x,y plot similar to other simulator (NS3)
+    def self.latitude_longitude(array_length, starting_location)
       starting_location = starting_location
       gaussian_erv = ERV::RandomVariable.new(distribution: :gaussian ,args: { mean: 0.00005, sd: 0.00005 })
       lats = [starting_location.lat]
@@ -90,7 +94,7 @@ module Mm
         )
       end
       kml.objects << folder
-      puts kml.render
+      #puts kml.render
       kml.save(filename)
     end
   end
@@ -99,7 +103,7 @@ module Mm
   class Test
     def self.test_helper()
       g = Geo::Coord.new(50.004444, 36.231389)
-      coords = RandomWalk.two_latitude_longitude(5000, g)
+      coords = RandomWalk.latitude_longitude(5000, g)
       Helper.coords_to_kml("test.kml", coords)
     end
   end

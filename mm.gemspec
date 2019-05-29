@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "mm"
   spec.version       = Mm::VERSION
   spec.authors       = ["Filippo Poltronieri"]
-  spec.email         = ["filippo@MacBook-Pro-di-Filippo.local"]
+  spec.email         = ["fpoltronieri@gmail.com"]
 
   spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
@@ -41,5 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "erv"
   spec.add_development_dependency "ruby_kml"
   spec.add_development_dependency "geo/coord"
-  
+
 end

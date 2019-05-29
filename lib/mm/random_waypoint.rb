@@ -1,6 +1,6 @@
 require 'erv'
 module Mm
-  # ruby implementation of the NS3 code
+  # TODO Implement RandomWayPoint
   class RandomWayPoint
     #speed and pause are random variable
     #attr_reader :speed, :pause, :position_allocator, :bounding_box
@@ -37,14 +37,12 @@ module Mm
 
     def run()
         @event_queue = SortedArray.new
-
         until @event_queue.empty?
             e = @event_queue.shift
         end
     end
 
-
-
+    # ns3 code
     # simulate random_waypoint mobility
 =begin
    void
