@@ -84,12 +84,24 @@ module Mm
 
   
   class Helper
+    # This method takes as input a filename and an Array of coordinates
+    # and it translates the coordinates into a kml file
     def self.coords_to_kml(filename, coords)
       kml = KMLFile.new()
+      # select a different color randomly
+      style = KML::Style.new(:id => "mmStyle")
+      is = KML::IconStyle.new
+      hex_color = "ff%06x" % (rand * 0xffffff)
+      is.color= hex_color
+      is.color_mode = "normal"
+      style.icon_style=is
       folder = KML::Folder.new(:name => "#{filename}")
+      folder.features << style
+      # create the placemarkers
       coords.length.times do |i|
         folder.features << KML::Placemark.new(
           :name => i,
+          :style_url => "#mmStyle",
           :geometry => KML::Point.new(:coordinates => {:lat => coords[i].lat, :lng => coords[i].lon})
         )
       end
