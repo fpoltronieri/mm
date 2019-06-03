@@ -60,9 +60,9 @@ module Mm
       lats = [starting_location.lat]
       lons = [starting_location.lon]
       positions = []
-      m1 = rand >= 0.5 ? 1 : -1
-      m2 = rand >= 0.5 ? 1 : -1
       (array_length - 1).times do |i|
+        m1 = rand >= 0.5 ? 1 : -1
+        m2 = rand >= 0.5 ? 1 : -1
         r = gaussian_erv.sample
         val = Random.rand(0..2)
         case val
@@ -80,7 +80,27 @@ module Mm
         end
       return positions
     end
+
+
+  # azimuth is expressed in degrees
+  def self.lat_lon_direction(array_length, starting_location)
+    starting_location = starting_location
+    erv_distance = ERV::RandomVariable.new(distribution: :gaussian ,args: { mean: 50.0, sd: 12.5 })
+    lats = [starting_location.lat]
+    lons = [starting_location.lon]
+    positions = []
+    current_location = starting_location
+    # select a different angle at each iteration. Do not conside
+    (array_length - 1).times do |i|
+      direction = Random.rand(0..2*Math::PI)
+      distance = erv_distance.sample
+      next_position = current_location.endpoint(distance, Helper::to_degree(direction))
+      positions << next_position
+      current_location = next_position
+      end
+    return positions
   end
+end
 
   
   class Helper
@@ -109,6 +129,15 @@ module Mm
       #puts kml.render
       kml.save(filename)
     end
+
+    def self.to_rad(degree)
+      rads = degrees * Math::PI / 180.0 
+    end
+
+    def self.to_degree(rads)
+      degrees = rads / Math::PI * 180.0
+    end
+
   end
 
 
@@ -116,9 +145,15 @@ module Mm
     def self.test_helper()
       g = Geo::Coord.new(50.004444, 36.231389)
       coords = RandomWalk.latitude_longitude(5000, g)
-      Helper.coords_to_kml("test.kml", coords)
+      Helper.coords_to_kml("test_rw.kml", coords)
     end
-  end
 
+    def self.test_helper_2()
+      g = Geo::Coord.new(50.004444, 36.231389)
+      coords = RandomWalk.lat_lon_direction(5000, g)
+      Helper.coords_to_kml("test_rw_d.kml", coords)
+    end
+
+  end
 # module ending
 end
