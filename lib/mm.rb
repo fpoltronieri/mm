@@ -83,9 +83,10 @@ module Mm
 
 
   # azimuth is expressed in degrees
-  def self.lat_lon_direction(array_length, starting_location)
+  def self.lat_lon_direction(array_length, starting_location, mean_distance = 50.0, sd_distance = 12.5)
     starting_location = starting_location
-    erv_distance = ERV::RandomVariable.new(distribution: :gaussian ,args: { mean: 50.0, sd: 12.5 })
+    erv_distance = ERV::RandomVariable.new(distribution: :gaussian, 
+      args: { mean: mean_distance, sd: sd_distance })
     lats = [starting_location.lat]
     lons = [starting_location.lon]
     positions = []
@@ -144,13 +145,13 @@ end
   class Test
     def self.test_helper()
       g = Geo::Coord.new(50.004444, 36.231389)
-      coords = RandomWalk.latitude_longitude(5000, g)
+      coords = RandomWalk.latitude_longitude(1000, g)
       Helper.coords_to_kml("test_rw.kml", coords)
     end
 
     def self.test_helper_2()
       g = Geo::Coord.new(50.004444, 36.231389)
-      coords = RandomWalk.lat_lon_direction(5000, g)
+      coords = RandomWalk.lat_lon_direction(1000, g)
       Helper.coords_to_kml("test_rw_d.kml", coords)
     end
 
